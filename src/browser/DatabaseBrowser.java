@@ -10,18 +10,17 @@ import javax.swing.table.*;
 
 public class DatabaseBrowser extends JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -4239697698079982662L;
+	
 	private Connection connection;
-	private JComboBox catalogBox;
-	private JComboBox schemaBox;
-	private JComboBox tableBox;
+	private JComboBox<?> catalogBox;
+	private JComboBox<?> schemaBox;
+	private JComboBox<?> tableBox;
 	private JTable table;
 
 	public static void main(String[] args) {
 		try {
+			new postgesql.driver.PostgresDriver
 			DatabaseBrowser browser = new DatabaseBrowser();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -105,7 +104,7 @@ public class DatabaseBrowser extends JFrame {
 		try {
 			DatabaseMetaData metaData = connection.getMetaData();
 			ResultSet resultSet = metaData.getCatalogs();
-			ArrayList values = new ArrayList();
+			ArrayList<String> values = new ArrayList<String>();
 			while (resultSet.next()) {
 				values.add(resultSet.getString(1));
 			}
@@ -122,7 +121,7 @@ public class DatabaseBrowser extends JFrame {
 		try {
 			DatabaseMetaData metaData = connection.getMetaData();
 			ResultSet resultSet = metaData.getSchemas();
-			ArrayList values = new ArrayList();
+			ArrayList<String> values = new ArrayList<String>();
 			while (resultSet.next()) {
 				values.add(resultSet.getString(1));
 			}
@@ -141,7 +140,7 @@ public class DatabaseBrowser extends JFrame {
 			String schema = (String) (schemaBox.getSelectedItem());
 			DatabaseMetaData metaData = connection.getMetaData();
 			ResultSet resultSet = metaData.getTables(catalog, schema, null, types);
-			ArrayList values = new ArrayList();
+			ArrayList<String> values = new ArrayList<String>();
 			while (resultSet.next()) {
 				values.add(resultSet.getString(3));
 			}
@@ -166,7 +165,6 @@ public class DatabaseBrowser extends JFrame {
 	}
 
 	private void refreshTable() {
-		String catalog = (catalogBox.isEnabled() ? catalogBox.getSelectedItem().toString() : null);
 		String schema = (schemaBox.isEnabled() ? schemaBox.getSelectedItem().toString() : null);
 		String tableName = (String) tableBox.getSelectedItem();
 		if (tableName == null) {
@@ -296,20 +294,24 @@ public class DatabaseBrowser extends JFrame {
 
 	class ResultSetTableModel extends AbstractTableModel {
 
-		private ArrayList columnHeaders;
-		private ArrayList tableData;
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -4000994414116367598L;
+		private ArrayList<String> columnHeaders;
+		private ArrayList<ArrayList<Object>> tableData;
 
 		public ResultSetTableModel(ResultSet resultSet) throws SQLException {
-			ArrayList rowData;
+			ArrayList<Object> rowData;
 			ResultSetMetaData rsmd = resultSet.getMetaData();
 			int count = rsmd.getColumnCount();
-			columnHeaders = new ArrayList(count);
-			tableData = new ArrayList();
+			columnHeaders = new ArrayList<String>(count);
+			tableData = new ArrayList<ArrayList<Object>>();
 			for (int i = 1; i <= count; i++) {
 				columnHeaders.add(rsmd.getColumnName(i));
 			}
 			while (resultSet.next()) {
-				rowData = new ArrayList(count);
+				rowData = new ArrayList<Object>(count);
 				for (int i = 1; i <= count; i++) {
 					rowData.add(resultSet.getObject(i));
 				}
@@ -326,8 +328,8 @@ public class DatabaseBrowser extends JFrame {
 		}
 
 		public Object getValueAt(int row, int column) {
-			List rowData = (List) (tableData.get(row));
-			return ((ArrayList) rowData).get(column);
+			ArrayList<?> rowData = (ArrayList<?>) (tableData.get(row));
+			return ((ArrayList<?>) rowData).get(column);
 		}
 
 		public boolean isCellEditable(int row, int column) {
