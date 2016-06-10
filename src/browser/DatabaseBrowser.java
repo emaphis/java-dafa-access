@@ -13,17 +13,19 @@ public class DatabaseBrowser extends JFrame {
 	private static final long serialVersionUID = -4239697698079982662L;
 	
 	private Connection connection;
-	private JComboBox<?> catalogBox;
-	private JComboBox<?> schemaBox;
-	private JComboBox<?> tableBox;
+	private JComboBox<Object> catalogBox;
+	private JComboBox<Object> schemaBox;
+	private JComboBox<Object> tableBox;
 	private JTable table;
 
 	public static void main(String[] args) {
 		try {
-			new postgesql.driver.PostgresDriver
-			DatabaseBrowser browser = new DatabaseBrowser();
+			//new postgesql.driver.PostgresDriver
+			//DatabaseBrowser browser = new DatabaseBrowser();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+		} finally {
+			//browser.
 		}
 	}
 
@@ -61,13 +63,13 @@ public class DatabaseBrowser extends JFrame {
 		panel.add(lable, constraints);
 
 		constraints.gridy = 1;
-		catalogBox = new JComboBox();
+		catalogBox = new JComboBox<Object>();
 		populateCatalogBox();
 		panel.add(catalogBox, constraints);
-		schemaBox = new JComboBox();
+		schemaBox = new JComboBox<Object>();
 		populateSchemaBox();
 		panel.add(schemaBox, constraints);
-		tableBox = new JComboBox();
+		tableBox = new JComboBox<Object>();
 		populateTableBox();
 		panel.add(tableBox, constraints);
 
@@ -109,11 +111,12 @@ public class DatabaseBrowser extends JFrame {
 				values.add(resultSet.getString(1));
 			}
 			resultSet.close();
-			catalogBox.setModel(new DefaultComboBoxModel(values.toArray()));
+			catalogBox.setModel(new DefaultComboBoxModel<Object>(values.toArray()));
 			catalogBox.setSelectedItem(connection.getCatalog());
 			catalogBox.setEnabled(values.size() > 0);
 		} catch (Exception e) {
 			catalogBox.setEnabled(false);
+		} finally {
 		}
 	}
 
@@ -126,7 +129,7 @@ public class DatabaseBrowser extends JFrame {
 				values.add(resultSet.getString(1));
 			}
 			resultSet.close();
-			schemaBox.setModel(new DefaultComboBoxModel(values.toArray()));
+			schemaBox.setModel(new DefaultComboBoxModel<Object>(values.toArray()));
 			schemaBox.setEnabled(values.size() > 0);
 		} catch (Exception e) {
 			schemaBox.setEnabled(false);
@@ -145,10 +148,11 @@ public class DatabaseBrowser extends JFrame {
 				values.add(resultSet.getString(3));
 			}
 			resultSet.close();
-			tableBox.setModel(new DefaultComboBoxModel(values.toArray()));
+			tableBox.setModel(new DefaultComboBoxModel<Object>(values.toArray()));
 			tableBox.setEnabled(values.size() > 0);
 		} catch (Exception e) {
 			tableBox.setEnabled(false);
+		} finally {
 		}
 	}
 
@@ -194,7 +198,7 @@ public class DatabaseBrowser extends JFrame {
 		private JTextField passwordField;
 		private JTextField urlField;
 
-		private boolean canceled;
+		//private boolean canceled;
 		private Connection connect;
 
 		public ConnectionDialog(JFrame f) {
@@ -328,7 +332,7 @@ public class DatabaseBrowser extends JFrame {
 		}
 
 		public Object getValueAt(int row, int column) {
-			ArrayList<?> rowData = (ArrayList<?>) (tableData.get(row));
+			ArrayList<?> rowData = (tableData.get(row));
 			return ((ArrayList<?>) rowData).get(column);
 		}
 
@@ -337,8 +341,9 @@ public class DatabaseBrowser extends JFrame {
 		}
 
 		public String getColumnName(int column) {
-			return (String) (columnHeaders.get(column));
+			return (columnHeaders.get(column));
 		}
 
 	}
 }
+

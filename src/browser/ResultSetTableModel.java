@@ -1,28 +1,27 @@
 package browser;
 
-import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;
 
 import javax.swing.table.*;
 
 class ResultSetTableModel extends AbstractTableModel {
-
-	  private List columnHeaders;
-	  private List tableData;
+	private static final long serialVersionUID = 1L;
+	private ArrayList<String> columnHeaders;
+	private ArrayList<ArrayList<Object>> tableData;
 
 	  public ResultSetTableModel(ResultSet resultSet)
 	      throws SQLException {
-	    List rowData;
+	    ArrayList<Object> rowData;
 	    ResultSetMetaData rsmd = resultSet.getMetaData();
 	    int count = rsmd.getColumnCount();
-	    columnHeaders = new ArrayList(count);
-	    tableData = new ArrayList();
+	    columnHeaders = new ArrayList<String>(count);
+	    tableData = new ArrayList<ArrayList<Object>>();
 	    for (int i = 1; i <= count; i++) {
 	      columnHeaders.add(rsmd.getColumnName(i));
 	    }
 	    while (resultSet.next()) {
-	      rowData = new ArrayList(count);
+	      rowData = new ArrayList<Object>(count);
 	      for (int i = 1; i <= count; i++) {
 	        rowData.add(resultSet.getObject(i));
 	      }
@@ -39,7 +38,7 @@ class ResultSetTableModel extends AbstractTableModel {
 	    }
 
 	    public Object getValueAt(int row, int column) {
-	      List rowData = (List)(tableData.get(row));
+	      ArrayList<?> rowData = tableData.get(row);
 	      return rowData.get(column);
 	    }
 
@@ -53,4 +52,3 @@ class ResultSetTableModel extends AbstractTableModel {
 
 	  }
 
-	}
