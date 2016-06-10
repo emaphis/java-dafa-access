@@ -3,17 +3,11 @@ package dvdrental;
 /**
  * From the tutorial:
  * http://www.postgresqltutorial.com/postgresql-jdbc/call-postgresql-stored-function/
+ *
  * Calling a stored funtion.
  */
 
 import java.sql.CallableStatement;
-
-/**
- * Calling stored functions
- *
- * http://www.postgresqltutorial.com/postgresql-jdbc/call-postgresql-stored-function/
- */
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -25,12 +19,6 @@ public class StoredFunction {
 	private final String user = "user12";
 	private final String password = "user12";
 
-	/**
-	 * Connect to the PostgreSQL database
-	 *
-	 * @return  a Connection object
-	 * @throws java.sql.SQLException
-	 */
 	public Connection connect() throws SQLException {
 		return DriverManager.getConnection(url, user, password);
 	}
